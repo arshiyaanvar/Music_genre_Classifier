@@ -1,0 +1,21 @@
+# Python / IDE / system files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.idea/
+.vscode/
+.DS_Store
+
+# Large data/models
+data/
+*.h5
+*.pkl
+models/
+
+# logs
+*.log
