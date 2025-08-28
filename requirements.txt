@@ -4,3 +4,5 @@ scikit-learn>=1.0
 matplotlib>=3.4.0
 streamlit>=1.25.0
 joblib>=1.0.0
+librosa>=0.10.0
+soundfile>=0.12.1
