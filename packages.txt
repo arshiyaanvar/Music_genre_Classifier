@@ -1,11 +1,1 @@
-numpy
-pandas
-matplotlib
-seaborn
-scikit-learn
-tensorflow
-keras
-librosa
-pydub
-streamlit
 ffmpeg
