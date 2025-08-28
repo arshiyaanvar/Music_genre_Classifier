@@ -1,4 +1,4 @@
-# app.py
+
 import streamlit as st
 import os
 import librosa
@@ -6,17 +6,13 @@ import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
 import tempfile
-from pydub import AudioSegment   # NEW
+from pydub import AudioSegment   
 from src.predict import predict_genre
 
-# =========================
 # Page config
-# =========================
 st.set_page_config(page_title="Music Genre Classification", page_icon="🎵", layout="wide")
 
-# =========================
 # Custom CSS
-# =========================
 st.markdown("""
     <style>
         .main {
@@ -47,33 +43,24 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
-
-# =========================
 # Helper for dynamic colors
-# =========================
 def genre_color(genre: str) -> str:
     colors = {
-        "classical": "#4CAF50",   # green
-        "disco": "#9C27B0",       # purple
-        "rock": "#F44336",        # red
-        "jazz": "#2196F3",        # blue
-        "blues": "#00BCD4",       # cyan
-        "country": "#795548",     # brown
-        "hiphop": "#FF9800",      # orange
-        "metal": "#212121",       # dark
-        "pop": "#E91E63",         # pink
-        "reggae": "#009688"       # teal
+        "classical": "#4CAF50",   
+        "disco": "#9C27B0",       
+        "rock": "#F44336",        
+        "jazz": "#2196F3",        
+        "blues": "#00BCD4",       
+        "country": "#795548",     
+        "hiphop": "#FF9800",      
+        "metal": "#212121",       
+        "pop": "#E91E63",         
+        "reggae": "#009688"      
     }
-    return colors.get(genre.lower(), "#607D8B")  # default grey
+    return colors.get(genre.lower(), "#607D8B")  
 
-# =========================
-# Title
-# =========================
 st.title("🎶 Music Genre Classification")
 
-# =========================
-# File uploader
-# =========================
 uploaded_files = st.file_uploader(
     "Upload audio file(s)", 
     type=["au", "wav", "mp3"], 
@@ -82,14 +69,11 @@ uploaded_files = st.file_uploader(
 
 results = []
 
-# =========================
-# Main App Logic
-# =========================
 if uploaded_files:
     for uploaded_file in uploaded_files:
         file_extension = uploaded_file.name.split(".")[-1]
 
-        # ---- Convert audio to WAV using pydub + ffmpeg ----
+        # Convert audio to WAV using pydub + ffmpeg 
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
             temp_file_path = tmp_file.name
 
@@ -100,7 +84,6 @@ if uploaded_files:
             st.error(f"⚠️ Could not convert {uploaded_file.name}: {e}")
             continue
 
-        # ---- Prediction FIRST (top of page) ----
         with st.spinner(f"🔎 Analyzing {uploaded_file.name}..."):
             genre = predict_genre(temp_file_path)
 
@@ -115,15 +98,13 @@ if uploaded_files:
         else:
             st.error("❌ Could not predict genre.")
 
-        # ---- Audio Playback (WAV is guaranteed playable) ----
+        # Audio Playback (WAV is guaranteed playable)
         st.markdown("### ▶️ Play Uploaded Audio")
         st.audio(temp_file_path, format="audio/wav")
-
-        # ---- Card for visuals ----
+        
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.subheader(f"🎵 {uploaded_file.name}")
 
-        # Visualizations
         try:
             y, sr = librosa.load(temp_file_path, sr=None)
             col1, col2 = st.columns(2)
@@ -147,11 +128,9 @@ if uploaded_files:
         except Exception as e:
             st.error(f"Could not process audio: {e}")
 
-        # Cleanup
         os.remove(temp_file_path)
-        st.markdown("</div>", unsafe_allow_html=True)  # Close card
+        st.markdown("</div>", unsafe_allow_html=True)  
 
-    # ---- Prediction Summary (for multiple files) ----
     if len(results) > 1:
         st.markdown("## 📋 Prediction Summary")
         st.table(results)
